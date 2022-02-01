@@ -1,6 +1,8 @@
 # -*- encoding: utf-8 -*-
 
 import numpy as np
+import scipy.special
+import scipy.signal
 
 
 class Linear:
@@ -17,7 +19,6 @@ class Linear:
 
     def update_output(self, inputs):
         self.output = np.dot(inputs, self.W.transpose()) + self.b
-
         return self.output
 
     def update_grad_input(self, next_layer_grad):
@@ -28,6 +29,10 @@ class Linear:
     def update_grad_params(self, inputs, next_layer_grad):
         self.grad_W = np.dot(next_layer_grad.transpose(), inputs)
         self.grad_b = np.sum(next_layer_grad, axis=0)
+
+    def update_params(self):
+        self.W -= self.grad_W
+        self.b -= self.grad_b
 
     def set_zeros_grad_params(self):
         self.grad_W.fill(0)
@@ -56,19 +61,17 @@ class Sigmoid:
         return self.layer_grad
 
 
-class CrossEntropyLoss:
+class MSECriterion:
     def __init__(self):
         self.output = None
         self.layer_grad = None
 
     def update_output(self, inputs, target):
-        self.output = (
-            -1 / len(inputs) * np.sum(target * np.log(inputs) + (1 - target) * np.log(1 - inputs))
-        )
+        self.output = np.power(np.linalg.norm(inputs - target), 2) / inputs.size
 
         return self.output
 
     def update_grad_input(self, inputs, target):
-        self.layer_grad = -1 / len(inputs) * np.sum(target / inputs - (1 - target) / (1 - inputs))
+        self.layer_grad = (2 / inputs.size) * (inputs - target)
 
         return self.layer_grad
