@@ -1,8 +1,6 @@
 # -*- encoding: utf-8 -*-
 
 import numpy as np
-import scipy.special
-import scipy.signal
 
 
 class Linear:
@@ -21,8 +19,10 @@ class Linear:
         self.output = np.dot(inputs, self.W.transpose()) + self.b
         return self.output
 
-    def update_grad_input(self, next_layer_grad):
+    def update_grad_input(self, inputs, next_layer_grad):
         self.layer_grad = np.dot(next_layer_grad, self.W)
+        self.update_grad_params(inputs, next_layer_grad)
+        self.update_params()
 
         return self.layer_grad
 
