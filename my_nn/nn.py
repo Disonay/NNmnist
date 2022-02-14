@@ -1,6 +1,7 @@
 # -*- encoding: utf-8 -*-
 
 import numpy as np
+from sklearn.utils import shuffle
 
 
 class NeuralNet:
@@ -15,8 +16,8 @@ class NeuralNet:
         self.loss_layer = loss
 
     def fit(self, inputs, target, epochs, batch_size):
-
         for epoch_number in range(epochs):
+            inputs, target = shuffle(inputs, target)
             for batch, batch_target in zip(
                 np.array_split(inputs, len(inputs) // batch_size),
                 np.array_split(target, len(inputs) // batch_size),
