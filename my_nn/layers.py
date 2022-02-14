@@ -61,6 +61,38 @@ class Sigmoid:
         return self.layer_grad
 
 
+class SoftPlus:
+    def __init__(self):
+        self.output = None
+        self.layer_grad = None
+
+    def update_output(self, inputs):
+        self.output = np.logaddexp(0, inputs)
+
+        return self.output
+
+    def update_grad_input(self, inputs, next_layer_grad):
+        self.layer_grad = next_layer_grad * np.exp(inputs) / (1 + np.exp(inputs))
+
+        return self.layer_grad
+
+
+class ReLU:
+    def __init__(self):
+        self.output = None
+        self.layer_grad = None
+
+    def update_output(self, inputs):
+        self.output = np.maximum(inputs, 0)
+
+        return self.output
+
+    def update_grad_input(self, inputs, next_layer_grad):
+        self.layer_grad = next_layer_grad * (inputs > 0)
+
+        return self.layer_grad
+
+
 class MSECriterion:
     def __init__(self):
         self.output = None
