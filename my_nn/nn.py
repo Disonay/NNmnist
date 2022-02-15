@@ -42,7 +42,7 @@ class NeuralNet:
 
     def backward(self, inputs, target):
         next_layer_grad = self.loss_layer.update_grad_input(self.layers[-1].output, target)
-        for layer_order in range(len(self.layers)-1, -1, -1):
+        for layer_order in range(len(self.layers) - 1, -1, -1):
             if layer_order != 0:
                 next_layer_grad = self.layers[layer_order].update_grad_input(
                     self.layers[layer_order - 1].output, next_layer_grad
