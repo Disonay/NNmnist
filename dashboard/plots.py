@@ -27,3 +27,9 @@ def plot_bar(data):
     ax.set_xticks(range(10), ["1", "2", "3", "4", "5", "6", "7", "8", "9", "0"])
     fig.tight_layout()
     return fig
+
+
+def plot_correlation(y_true, y_pred):
+    corrplot_df = pd.DataFrame(confusion_matrix(y_true, y_pred, labels=range(10)), columns=range(10))
+    return corrplot.Corrplot(corrplot_df).plot(colorbar=False, method="square", shrink=0.9, rotation=45)
+

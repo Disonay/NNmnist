@@ -6,13 +6,15 @@ from sklearn.metrics import accuracy_score
 from streamlit_drawable_canvas import st_canvas
 
 from dashboard.load_data import load_nn, load_train_test_data
-from dashboard.plots import plot_bar, plot_example
+from dashboard.plots import plot_bar, plot_example, plot_correlation
 from my_nn.utils import image_preprocessing
+
+st.set_option('deprecation.showPyplotGlobalUse', False)
 
 (train_X, train_y), (test_X, test_y) = load_train_test_data()
 nn = load_nn("nn.pickle")
 
-page = st.sidebar.radio("Parts", ["Data", "Recognise handwriting"])
+page = st.sidebar.radio("Parts", ["General Info", "Recognise handwriting"])
 
 if page == "Recognise handwriting":
     image_data = st_canvas(
@@ -27,11 +29,13 @@ if page == "Recognise handwriting":
                     )
                 )
             )
-elif page == "Data":
+elif page == "General Info":
     st.markdown("## Example of train dataset")
     st.pyplot(plot_example(train_X))
     st.markdown("## Count of each digit")
     st.pyplot(plot_bar(train_y))
+    st.markdown("## Correlation plot")
+    st.pyplot(plot_correlation(test_y, np.argmax(nn.predict(test_X.reshape(10000, 784) / 255), axis=1)))
     st.markdown(
         "## Accuracy is _{}_".format(
             accuracy_score(test_y, np.argmax(nn.predict(test_X.reshape(10000, 784) / 255), axis=1))
