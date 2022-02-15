@@ -20,6 +20,8 @@ matplotlib = "^3.5.1"
 streamlit = "^1.5.1"
 streamlit-drawable-canvas = "^0.8.0"
 scikit-image = "^0.19.1"
+biokit = "^0.5.0"
+pandas = "^1.4.1"
 
 [build-system]
 requires = ["poetry-core>=1.0.0"]
