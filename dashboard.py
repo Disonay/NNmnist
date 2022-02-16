@@ -21,9 +21,9 @@ if page == "Recognise handwriting":
         width=300, height=300, stroke_width=28, drawing_mode="freedraw", key="canvas"
     )
     if image_data.image_data is not None:
-        if st.button("Predict!"):
+        if st.button("Recognize!"):
             st.markdown(
-                "Is {}".format(
+                "## Is {}".format(
                     np.argmax(
                         nn.predict(image_preprocessing(image_data.image_data).reshape(1, 784))
                     )
