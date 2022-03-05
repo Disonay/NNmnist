@@ -1,11 +1,13 @@
 # -*- encoding: utf-8 -*-
+
 import os
 import pickle
 
 import numpy as np
 from keras.datasets import mnist
 
-from my_nn.layers import Linear, MSECriterion, ReLU, Sigmoid, SoftPlus, CrossEntropyLoss, SoftMax
+from my_nn.architecture.layers import Linear, ReLU, SoftMax
+from my_nn.architecture.loss import CrossEntropyLoss
 from my_nn.nn import NeuralNet
 from my_nn.utils import kron_delta
 
