@@ -1,16 +1,19 @@
 # -*- encoding: utf-8 -*-
 
 import numpy as np
+from scipy.linalg import block_diag
 
 
 class Linear:
-    def __init__(self, in_features, out_features):
+    def __init__(self, in_features, out_features, lr=0.001):
         uniform_param = 1.0 / np.sqrt(in_features)
         self.W = np.random.uniform(-uniform_param, uniform_param, size=(out_features, in_features))
         self.b = np.random.uniform(-uniform_param, uniform_param, size=out_features)
 
         self.grad_W = np.zeros_like(self.W)
         self.grad_b = np.zeros_like(self.b)
+
+        self.lr = lr
 
         self.output = None
         self.layer_grad = None
@@ -31,8 +34,8 @@ class Linear:
         self.grad_b = np.sum(next_layer_grad, axis=0)
 
     def update_params(self):
-        self.W -= self.grad_W
-        self.b -= self.grad_b
+        self.W -= self.lr*self.grad_W
+        self.b -= self.lr*self.grad_b
 
     def set_zeros_grad_params(self):
         self.grad_W.fill(0)
