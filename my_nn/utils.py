@@ -13,3 +13,10 @@ def kron_delta(index):
 
 def image_preprocessing(img):
     return resize(1 - rgb2gray(rgba2rgb(img / 255)), (28, 28))
+
+
+def get_batches(inputs, target, batch_size):
+    indexes = list(range(len(inputs)))
+    np.random.shuffle(indexes)
+    for batch_start in filter(lambda x: len(indexes) - x >= batch_size, indexes[::batch_size]):
+        yield inputs[batch_start:batch_start+batch_size], target[batch_start:batch_start+batch_size]
