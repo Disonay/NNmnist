@@ -77,6 +77,26 @@ class SoftPlus:
         return self.layer_grad
 
 
+class SoftMax:
+    def __init__(self):
+        self.output = None
+        self.layer_grad = None
+
+    def update_output(self, inputs):
+        shift_exp = np.exp(inputs - np.max(inputs, axis=1)[:, None])
+        self.output = shift_exp / np.sum(shift_exp, axis=1)[:, None]
+
+        return self.output
+
+    def update_grad_input(self, inputs, next_layer_grad):
+        shift_exp = np.exp(inputs - np.max(inputs, axis=1)[:, None])
+        s = shift_exp / np.sum(shift_exp, axis=1)[:, None]
+
+        self.layer_grad = block_diag(*[-np.outer(s_i, s_i) + np.diag(s_i.flatten()) for s_i in s])
+
+        return (next_layer_grad @ self.layer_grad).reshape(inputs.shape)
+
+
 class ReLU:
     def __init__(self):
         self.output = None
@@ -107,3 +127,20 @@ class MSECriterion:
         self.layer_grad = (2 / inputs.size) * (inputs - target)
 
         return self.layer_grad
+
+
+class CrossEntropyLoss:
+    def __init__(self):
+        self.output = None
+        self.layer_grad = None
+
+    def update_output(self, inputs, target):
+        self.output = np.mean(np.sum(-target*np.log(inputs), axis=1))
+
+        return self.output
+
+    def update_grad_input(self, inputs, target):
+        self.layer_grad = (-target / inputs).reshape(1, -1)
+
+        return self.layer_grad
+
