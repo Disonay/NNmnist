@@ -1,7 +1,6 @@
 # -*- encoding: utf-8 -*-
 
-import numpy as np
-from sklearn.utils import shuffle
+from my_nn.utils import get_batches
 
 
 class NeuralNet:
@@ -17,11 +16,7 @@ class NeuralNet:
 
     def fit(self, inputs, target, epochs, batch_size):
         for epoch_number in range(epochs):
-            inputs, target = shuffle(inputs, target)
-            for batch, batch_target in zip(
-                np.array_split(inputs, len(inputs) // batch_size),
-                np.array_split(target, len(inputs) // batch_size),
-            ):
+            for batch, batch_target in get_batches(inputs, target, batch_size=batch_size):
                 self.forward(batch)
                 self.backward(batch, batch_target)
 
